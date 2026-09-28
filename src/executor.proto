@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package executor;
+
+message UpdateRequest {
+  string state = 1;
+}
+
+message UpdateResponse {
+  string result = 1;
+}
+
+service UpdateService {
+  rpc UpdateStatus ( UpdateRequest ) returns ( UpdateResponse );
+}
