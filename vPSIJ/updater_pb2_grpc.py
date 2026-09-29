@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import executor_pb2 as executor__pb2
+import updater_pb2 as updater__pb2
 
 GRPC_GENERATED_VERSION = '1.82.1'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + ' but the generated code in executor_pb2_grpc.py depends on'
+        + ' but the generated code in updater_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -35,9 +35,9 @@ class UpdateServiceStub:
             channel: A grpc.Channel.
         """
         self.UpdateStatus = channel.unary_unary(
-                '/executor.UpdateService/UpdateStatus',
-                request_serializer=executor__pb2.UpdateRequest.SerializeToString,
-                response_deserializer=executor__pb2.UpdateResponse.FromString,
+                '/updater.UpdateService/UpdateStatus',
+                request_serializer=updater__pb2.UpdateRequest.SerializeToString,
+                response_deserializer=updater__pb2.UpdateResponse.FromString,
                 _registered_method=True)
 
 
@@ -55,14 +55,14 @@ def add_UpdateServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'UpdateStatus': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateStatus,
-                    request_deserializer=executor__pb2.UpdateRequest.FromString,
-                    response_serializer=executor__pb2.UpdateResponse.SerializeToString,
+                    request_deserializer=updater__pb2.UpdateRequest.FromString,
+                    response_serializer=updater__pb2.UpdateResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'executor.UpdateService', rpc_method_handlers)
+            'updater.UpdateService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('executor.UpdateService', rpc_method_handlers)
+    server.add_registered_method_handlers('updater.UpdateService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -83,9 +83,9 @@ class UpdateService:
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/executor.UpdateService/UpdateStatus',
-            executor__pb2.UpdateRequest.SerializeToString,
-            executor__pb2.UpdateResponse.FromString,
+            '/updater.UpdateService/UpdateStatus',
+            updater__pb2.UpdateRequest.SerializeToString,
+            updater__pb2.UpdateResponse.FromString,
             options,
             channel_credentials,
             insecure,

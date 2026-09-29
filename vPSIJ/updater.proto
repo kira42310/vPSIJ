@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package executor;
+package updater;
 
 message UpdateRequest {
   string state = 1;
