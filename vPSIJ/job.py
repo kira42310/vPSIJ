@@ -66,7 +66,7 @@ class Job:
     return module
 
   def _get_sche_template_dir( self, scheduler_name ):
-    template_info_file = Path.home() / '.scheduler_template_info/template_location.json'
+    template_info_file = Path.home() / 'vPSIJ_util/template_location.json'
     with open( template_info_file, 'r' ) as f:
       template_info = json.load( f )
     if scheduler_name in template_info.keys():
