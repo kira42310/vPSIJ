@@ -8,15 +8,15 @@ from gevent import joinall
 
 # import os
 import grpc
-import updater_pb2
-import updater_pb2_grpc
 import socket
 import subprocess
 import shutil
 import tarfile
 
-from job import Job
-from job_status import status
+from .job import Job
+from .job_status import status
+from . import updater_pb2
+from . import updater_pb2_grpc
 
 LARGE_TIMEOUT = timedelta( weeks = 12 )
 rpc_client_loc = './dist/job_rpc_client'
