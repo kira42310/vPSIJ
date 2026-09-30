@@ -50,7 +50,7 @@ class Executor:
     if self.job.work_directory is None:
       _working_dir = f'{ default_base_dir }/{ self.job.id }'
     else:
-      _working_dir = self.job.work_directory + f'/{ self.job.id }'
+      _working_dir = f'{ self.job.work_directory }/{ self.job.id }'
     Path( _working_dir ).mkdir( parents = True, exist_ok = True )
 
     # Generate job scheduler script
@@ -109,7 +109,7 @@ class Executor:
     if self.job.work_directory is None:
       _working_dir = f'{ default_base_dir }/{ self.job.id }'
     else:
-      _working_dir = self.job.work_directory + f'/vPSIJ/{ self.job.id }'
+      _working_dir = f'{ self.job.work_directory }/vPSIJ/{ self.job.id }'
     Path( _working_dir ).mkdir( parents = True, exist_ok = True )
 
     # Make directory at the server side in the ~/.vPSIJ/uuid
