@@ -1,8 +1,8 @@
 from os import getenv
 from sys import argv
 import grpc
-from . import executor_pb2
-from . import executor_pb2_grpc
+from . import updater_pb2
+from . import updater_pb2_grpc
 
 
 def update():
@@ -16,8 +16,8 @@ def update():
     sechannel = grpc.insecure_channel
 
   with sechannel( grpc_server ) as channel:
-    stub = executor_pb2_grpc.UpdateServiceStub( channel )
-    request = executor_pb2.UpdateRequest( state = response )
+    stub = updater_pb2_grpc.UpdateServiceStub( channel )
+    request = updater_pb2.UpdateRequest( state = response )
     print( f'{request.state}' )
     response = stub.UpdateStatus( request )
     print( f'{response.result}' )
