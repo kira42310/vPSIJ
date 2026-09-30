@@ -8,8 +8,8 @@ from gevent import joinall
 
 # import os
 import grpc
-import executor_pb2
-import executor_pb2_grpc
+import updater_pb2
+import updater_pb2_grpc
 import socket
 import subprocess
 import shutil
@@ -17,17 +17,6 @@ import tarfile
 
 from job import Job
 from job_status import status
-
-# class executor_servicer( test_pb2_grpc.UpdateServiceServicer ):
-
-#   # def __init__( self, job ):
-#   #   self.job = job
-  
-#   def UpdateStatus( self, request, context ):
-#     state = request.state
-#     print( f'{state}' )
-    
-#     return executor_pb2.UpdateResponse( result = 'S' )
 
 LARGE_TIMEOUT = timedelta( weeks = 12 )
 rpc_client_loc = './dist/job_rpc_client'
@@ -41,7 +30,7 @@ class Executor:
     self._callback = None
     self._server = grpc.server( futures.ThreadPoolExecutor( max_workers = 1 ) )
     self._state = status.new
-    executor_pb2_grpc.add_UpdateServiceServicer_to_server( self.executor_servicer( self ), self._server )
+    updater_pb2_grpc.add_UpdateServiceServicer_to_server( self.executor_servicer( self ), self._server )
 
   def submit( self, 
       secure_channel = False, 
@@ -285,14 +274,14 @@ class Executor:
     #   call initialize_rermote function
     # pass
 
-  class executor_servicer( executor_pb2_grpc.UpdateServiceServicer ):
+  class updater_servicer( updater_pb2_grpc.UpdateServiceServicer ):
 
     def __init__( self, ex ):
       self.ex = ex
 
     def UpdateStatus(self, request, context):
       self.ex.status = status( int( request.state ) )
-      return executor_pb2.UpdateResponse( result = 'S' )
+      return updater_pb2.UpdateResponse( result = 'S' )
 
 # def serve( job ):
 
