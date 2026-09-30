@@ -30,7 +30,7 @@ class Executor:
     self._callback = None
     self._server = grpc.server( futures.ThreadPoolExecutor( max_workers = 1 ) )
     self._state = status.new
-    updater_pb2_grpc.add_UpdateServiceServicer_to_server( self.executor_servicer( self ), self._server )
+    updater_pb2_grpc.add_UpdateServiceServicer_to_server( self.updater_servicer( self ), self._server )
 
   def submit( self, 
       secure_channel = False, 
