@@ -215,12 +215,12 @@ class Executor:
 
   def _get_hostname_port( self ):
     hostname = socket.gethostname()
-    port = self.get_port( address = hostname )
+    port = self._get_port( address = hostname )
     return ( hostname, port )
 
   def _get_ip_port( self ):
     ip = socket.gethostbyname( socket.gethostname() )
-    port = self.get_port( address = ip )
+    port = self._get_port( address = ip )
     return ( ip, port )
 
   def _get_port( self, address = 'localhost' ):
