@@ -9,7 +9,7 @@ import importlib.machinery
 import json
 import sys
 
-from job_spec import job_spec
+from .job_spec import job_spec
 # from job_status import job_status
 
 class Job:
