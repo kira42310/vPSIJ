@@ -54,7 +54,7 @@ class Job:
     if output_dir is None:
       _output_file = self.work_directory / self.script_name
     else:
-      _output_file = output_dir / self.script_name
+      _output_file = f'{ output_dir }/{ self.script_name }'
     with open( _output_file, 'w' ) as f:
       f.write( self.script )
 
