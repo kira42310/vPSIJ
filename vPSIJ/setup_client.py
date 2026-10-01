@@ -8,7 +8,7 @@ import vPSIJ
 
 def setup():
   home_dir = getenv( 'HOME' )
-  gRPC_dir = f'{ home_dir }/vPSIJ_util/gRPC/'
+  gRPC_dir = f'{ home_dir }/vPSIJ_util/grpc/'
   vPSIJ_dir = vPSIJ.__path__
   python_bin_dir = '/'.join(sys.executable.split('/')[:-1])
 
