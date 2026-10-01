@@ -7,10 +7,11 @@ authors = [
     { email = "soratouch@hotmail.com" }
 ]
 requires-python = ">=3.8"
-dependencies = []
+dependencies = [ 'jinja2', 'grpcio', 'grpcio-tools', 'parallel-ssh', 'urllib3' ]
 
 [project.scripts]
-vpsij-updater = "vPSIJ.job_rpc_client:update"
+vpsij-updater = "vPSIJ.job_rpc_client:main"
+vpsij-setup-client = "vPSIJ.setup_client:main"
 
 [build-system]
 requires = ["uv_build>=0.6.8"]
