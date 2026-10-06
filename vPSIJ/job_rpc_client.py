@@ -5,10 +5,11 @@ from . import updater_pb2
 from . import updater_pb2_grpc
 
 
-def update( grpc_server, secure, response ):
-  # grpc_server = argv[1]
-  # secure = bool( int( argv[2] ) )
-  # response = argv[3]
+# def update( grpc_server, secure, response ):
+def update():
+  grpc_server = argv[1]
+  secure = bool( int( argv[2] ) )
+  response = argv[3]
 
   if secure:
     sechannel = grpc.secure_channel
@@ -22,8 +23,8 @@ def update( grpc_server, secure, response ):
     response = stub.UpdateStatus( request )
     print( f'{response.result}' )
 
-if __name__ == '__main__':
-  grpc_server = argv[1]
-  secure = bool( int( argv[2] ) )
-  response = argv[3]
-  update( grpc_server, secure, response )
+# if __name__ == '__main__':
+#   grpc_server = argv[1]
+#   secure = bool( int( argv[2] ) )
+#   response = argv[3]
+#   update( grpc_server, secure, response )

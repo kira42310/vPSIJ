@@ -10,7 +10,7 @@ def setup():
   print( f"{ '#' * 10 } Script start! { '#' * 10 }" )
   home_dir = getenv( 'HOME' )
   gRPC_dir = f'{ home_dir }/vPSIJ_util/grpc/'
-  vPSIJ_dir = vPSIJ.__path__
+  vPSIJ_dir = vPSIJ.__path__[0]
   python_bin_dir = '/'.join(sys.executable.split('/')[:-1])
 
   print( f"{ '#' * 10 } mkdir grpc directory in ~/vPSIJ_util/ { '#' * 10 }" )
