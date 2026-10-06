@@ -24,7 +24,7 @@ def setup():
   print( "# Success!")
 
   print( f"{ '#' * 10 } Copy vpsij-updater cmd to ~/vPSIJ_util/grpc/  { '#' * 10 }" )
-  shutil.copy2( f'{ python_bin_dir }/vpsij-updater' )
+  shutil.copy2( f'{ python_bin_dir }/vpsij-updater', gRPC_dir )
   print( "# Success!")
 
 if __name__ == '__main__':
