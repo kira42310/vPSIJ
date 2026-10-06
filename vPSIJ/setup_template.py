@@ -1,9 +1,9 @@
 
 import os
 import shutil
-import urllib3
 import zipfile
 import json
+import subprocess
 from pathlib import Path
 
 def setup():
@@ -21,11 +21,9 @@ def setup():
   print( "# Success!")
   
   print( f"{ '#' * 10 } Download vPSIJ template repository from GitHub { '#' * 10 }" )
-  http = urllib3.PoolManager()
-  with http.request( "GET", template_url, preload_content = False ) as response:
-    with open( zip_loc, 'wb' ) as outf:
-      shutil.copyfileobj( response, outf )
-  print( "# Success!")
+  download_cmd = [ f"curl -L -o { zip_loc } { template_url }" ]
+  r = subprocess.run( download_cmd )
+  print( f"# Success!" )
   
   print( f"{ '#' * 10 } Unzip repository zip file and move sche_template directory to the vPSIJ_util dirctory { '#' * 10 }" )
   with zipfile.ZipFile( zip_loc, 'r' ) as zipf:

@@ -7,7 +7,7 @@ authors = [
     { email = "soratouch@hotmail.com" }
 ]
 requires-python = ">=3.8"
-dependencies = [ 'jinja2', 'grpcio', 'grpcio-tools', 'parallel-ssh', 'urllib3' ]
+dependencies = [ 'jinja2', 'grpcio', 'grpcio-tools', 'parallel-ssh' ]
 
 [project.scripts]
 vpsij-updater = "vPSIJ.job_rpc_client:update"
