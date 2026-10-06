@@ -21,7 +21,7 @@ def setup():
   print( "# Success!")
   
   print( f"{ '#' * 10 } Download vPSIJ template repository from GitHub { '#' * 10 }" )
-  download_cmd = [ f"curl -L -o { zip_loc } { template_url }" ]
+  download_cmd = [ 'curl', '-L', '-o', zip_loc, template_url ]
   r = subprocess.run( download_cmd )
   print( f"# Success!" )
   
