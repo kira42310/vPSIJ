@@ -44,10 +44,12 @@ class Job:
     self.status_cmd = self.sche.get_status_cmd()
     self.cancel_cmd = self.sche.get_cancel_cmd()
 
-  def generate_template( self, grpc_server = 'localhost:50051', secure_channel = 0 ):
+  def generate_template( self, grpc_server = 'localhost:50051', secure_channel = 0, updater_ssh_user_address = None ):
     tmp = self.spec.__dict__
     tmp[ 'grpc_server' ] = grpc_server
     tmp[ 'secure_channel' ] = secure_channel
+    if( updater_ssh_user_address is not None ):
+      tmp[ 'updater_ssh_user_address' ] = updater_ssh_user_address
     self.script = self.sche.generate_script( tmp )
 
   def output_script( self, output_dir: Optional[ Path ] = None ):

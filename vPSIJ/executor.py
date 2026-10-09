@@ -37,7 +37,8 @@ class Executor:
       mode: Literal[ 'local', 'remote' ] = 'local', 
       callback_address: Literal[ 'hostname', 'ip', 'custom' ] = 'hostname', 
       custom_callback_address: Optional[ str ] = None,
-      custom_callback_port: Optional[ str ] = None 
+      custom_callback_port: Optional[ str ] = None,
+      updater_ssh_user_address: Optional[ str ] = None
       ):
 
     # Set status to submiiting
@@ -54,7 +55,7 @@ class Executor:
     Path( _working_dir ).mkdir( parents = True, exist_ok = True )
 
     # Generate job scheduler script
-    self.job.generate_template( f'{host_port[0]}:{host_port[1]}' , int( secure_channel ) )
+    self.job.generate_template( f'{host_port[0]}:{host_port[1]}' , int( secure_channel ), updater_ssh_user_address )
     self.job.output_script( output_dir = _working_dir )
 
     # Start gRPC server
