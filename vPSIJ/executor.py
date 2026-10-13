@@ -83,7 +83,8 @@ class Executor:
       remote_working_dir: Optional[ str ] = None,
       callback_address: Literal[ 'hostname', 'ip', 'custom' ] = 'hostname', 
       custom_callback_address: Optional[ str ] = None,
-      custom_callback_port: Optional[ str ] = None
+      custom_callback_port: Optional[ str ] = None,
+      updater_ssh_user_address: Optional[ str ] = None
     ):
     # arguments: host, port, username, pkey_loc, data, allow_agent, identity_auth, ssh_timeout
     # prepare parameters
@@ -122,7 +123,7 @@ class Executor:
       _remote_dir_base = remote_working_dir + f'/vPSIJ/'
 
     # Generate job scheduler script
-    self.job.generate_template( f'{host_port[0]}:{host_port[1]}' , int( secure_channel ) )
+    self.job.generate_template( f'{host_port[0]}:{host_port[1]}' , int( secure_channel ), updater_ssh_user_address = updater_ssh_user_address )
     self.job.output_script( output_dir = _working_dir )
 
     # Start gRPC server
