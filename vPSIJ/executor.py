@@ -141,7 +141,7 @@ class Executor:
         raise Exception( mkdir_out.stderr )
 
       # Transfer file to remote site
-      client.copy_file( _working_dir, _remote_dir_base )
+      client.copy_file( _working_dir, _remote_dir_base, recurse = True )
       # client.copy_file( self.job.work_directory / self.job.script_name, f'{ _remote_dir_base }/{self.job.script_name}' )
       # client.copy_file( rpc_client_loc, f'{ _remote_dir_base }/job_rpc_client' )
 
