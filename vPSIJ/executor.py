@@ -133,7 +133,7 @@ class Executor:
     submit_cmd = f"{ ' '.join( self.job.submit_cmd ) } { _remote_dir_base }/{ self.job.script_name }"
 
     # Start remote submission
-    with SSHClient( host = host, port = port, user = username, pkey = pkey_loc, allow_agent = allow_agent, identity_auth = identity_auth, ssh_timeout = ssh_timeout  ) as client:
+    with SSHClient( host = host, port = port, user = username, pkey = pkey_loc, allow_agent = allow_agent, identity_auth = identity_auth, timeout = ssh_timeout  ) as client:
       # Create directory at remote site
       mkdir_out = client.run_command( f'mkdir -p { _remote_dir_base }' )
       client.wait_finished( mkdir_out, timeout = 300 )
