@@ -34,7 +34,6 @@ class Executor:
 
   def submit( self, 
       secure_channel = False, 
-      mode: Literal[ 'local', 'remote' ] = 'local', 
       callback_address: Literal[ 'hostname', 'ip', 'custom' ] = 'hostname', 
       custom_callback_address: Optional[ str ] = None,
       custom_callback_port: Optional[ str ] = None,
