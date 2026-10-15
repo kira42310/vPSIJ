@@ -14,7 +14,11 @@ from .job_spec import job_spec
 
 class Job:
   
-  def __init__( self, scheduler, spec: Optional[ job_spec ] = None, work_directory: Optional[ Path ] = None, custom_sche_template_dir: Optional[ Path ] = None ):
+  def __init__( self, 
+    scheduler, 
+    spec: Optional[ job_spec ] = None, 
+    work_directory: Optional[ Path ] = None 
+  ):
     
     self.id = str( uuid4() )
     self.scheduler = scheduler
@@ -30,7 +34,6 @@ class Job:
     self.script_name = f"{ self.scheduler }_{ self.id }.sh"
     self.script = None
     sche_template_dir = self._get_sche_template_dir( self.scheduler )
-    if sche_template_dir is None: sche_template_dir = custom_sche_template_dir
     self.sche = self.load_module_from_path( self.scheduler, sche_template_dir )
     self.get_cmd()
     
