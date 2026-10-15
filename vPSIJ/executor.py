@@ -48,10 +48,11 @@ class Executor:
     host_port = self.format_host_port( callback_address = callback_address, custom_callback_address = custom_callback_address, custom_callback_port = custom_callback_port )
 
     # Make directory at local site
-    if self.job.work_directory is None:
-      _working_dir = f'{ default_base_dir }/{ self.job.id }'
-    else:
-      _working_dir = f'{ self.job.work_directory }/{ self.job.id }'
+    # if self.job.work_directory is None:
+    #   _working_dir = f'{ default_base_dir }/{ self.job.id }'
+    # else:
+    #   _working_dir = f'{ self.job.work_directory }/{ self.job.id }'
+    _working_dir = self.job.work_directory
     Path( _working_dir ).mkdir( parents = True, exist_ok = True )
 
     # Generate job scheduler script
@@ -108,10 +109,11 @@ class Executor:
     host_port = self.format_host_port( callback_address = callback_address, custom_callback_address = custom_callback_address, custom_callback_port = custom_callback_port )
 
     # Make directory at local site
-    if self.job.work_directory is None:
-      _working_dir = f'{ default_base_dir }/{ self.job.id }'
-    else:
-      _working_dir = f'{ self.job.work_directory }/vPSIJ/{ self.job.id }'
+    # if self.job.work_directory is None:
+    #   _working_dir = f'{ default_base_dir }/{ self.job.id }'
+    # else:
+    #   _working_dir = f'{ self.job.work_directory }/vPSIJ/{ self.job.id }'
+    _working_dir = self.job.work_directory
     Path( _working_dir ).mkdir( parents = True, exist_ok = True )
 
     # Make directory at the server side in the ~/.vPSIJ/uuid
@@ -182,8 +184,8 @@ class Executor:
         self._cv.wait( left_seconds )
 
 
-  def cancel():
-    pass
+  # def cancel():
+  #   pass
 
   def start_grpc_server( self, server_port: str, secure: bool = False ):
     if secure:

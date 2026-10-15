@@ -2,7 +2,7 @@ from typing import Optional
 from threading import Condition
 from uuid import uuid4
 from pathlib import Path
-from os import getcwd
+from os import getenv
 
 import importlib.util
 import importlib.machinery
@@ -20,9 +20,9 @@ class Job:
     self.scheduler = scheduler
     self.spec = spec
     if work_directory:
-      self.work_directory = work_directory
+      self.work_directory = work_directory / f'vPSIJ/{ self.id }'
     else:
-      self.work_directory = Path( getcwd() )
+      self.work_directory = Path( getenv('HOME') ) / f'vPSIJ/{ self.id }'
     self.native_id = None
     self.submit_cmd = None
     self.status_cmd = None
