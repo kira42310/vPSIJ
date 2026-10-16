@@ -117,7 +117,7 @@ class Executor:
 
     # Make directory at the server side in the ~/.vPSIJ/uuid
     if remote_working_dir is None:
-      _remote_dir_base = f'~/vPSIJ/{self.job.id}'
+      _remote_dir_base = f'vPSIJ/{self.job.id}'
       # _remote_dir_base = f'vPSIJ/'
     else:
       _remote_dir_base = remote_working_dir + f'/vPSIJ/{self.job.id}'
