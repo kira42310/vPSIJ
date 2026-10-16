@@ -117,11 +117,11 @@ class Executor:
 
     # Make directory at the server side in the ~/.vPSIJ/uuid
     if remote_working_dir is None:
-      # _remote_dir_base = f'~/vPSIJ/{self.job.id}'
-      _remote_dir_base = f'vPSIJ/'
+      _remote_dir_base = f'~/vPSIJ/{self.job.id}'
+      # _remote_dir_base = f'vPSIJ/'
     else:
-      # _remote_dir_base = remote_working_dir + f'/vPSIJ/{self.job.id}'
-      _remote_dir_base = remote_working_dir + f'/vPSIJ/'
+      _remote_dir_base = remote_working_dir + f'/vPSIJ/{self.job.id}'
+      # _remote_dir_base = remote_working_dir + f'/vPSIJ/'
 
     # Generate job scheduler script
     self.job.generate_template( f'{host_port[0]}:{host_port[1]}' , int( secure_channel ), updater_ssh_user_address = updater_ssh_user_address )
