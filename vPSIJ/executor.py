@@ -1,6 +1,6 @@
 from concurrent import futures
 from threading import Condition
-from typing import Literal, Optional
+from typing import Literal, Optional, Union
 from datetime import timedelta, datetime
 from pathlib import Path
 from pssh.clients import SSHClient
@@ -71,15 +71,15 @@ class Executor:
       raise Exception( response )
 
   def remote_submit( self, 
-      host, 
-      username = None, 
-      port = None, 
-      pkey_loc = None, 
-      data = None, 
-      allow_agent = True, 
-      identity_auth = True, 
-      ssh_timeout = None,
-      secure_channel = False,
+      host: str, 
+      username: str = None, 
+      port: str = None, 
+      pkey_loc: Optional[ Union[ str, Path ] ] = None, 
+      data: Optional[ Union[ str, Path ] ] = None, 
+      allow_agent: bool = True, 
+      identity_auth: bool = True, 
+      ssh_timeout: Optional[ Union[ int, float ] ] = None,
+      secure_channel: bool = False,
       remote_working_dir: Optional[ str ] = None,
       callback_address: Literal[ 'hostname', 'ip', 'custom' ] = 'hostname', 
       custom_callback_address: Optional[ str ] = None,
@@ -117,14 +117,18 @@ class Executor:
 
     # Make directory at the server side in the ~/.vPSIJ/uuid
     if remote_working_dir is None:
-      _remote_dir_base = f'vPSIJ/{self.job.id}'
+      _remote_dir_base = f'$HOME/vPSIJ/{self.job.id}'
       # _remote_dir_base = f'vPSIJ/'
     else:
       _remote_dir_base = remote_working_dir + f'/vPSIJ/{self.job.id}'
       # _remote_dir_base = remote_working_dir + f'/vPSIJ/'
 
     # Generate job scheduler script
-    self.job.generate_template( f'{host_port[0]}:{host_port[1]}' , int( secure_channel ), updater_ssh_user_address = updater_ssh_user_address )
+    self.job.generate_template( 
+      f'{host_port[0]}:{host_port[1]}' ,
+      int( secure_channel ), 
+      updater_ssh_user_address = updater_ssh_user_address,
+      remote_dir_base = _remote_dir_base )
     self.job.output_script( output_dir = _working_dir )
 
     # Start gRPC server
@@ -145,6 +149,8 @@ class Executor:
       client.copy_file( _working_dir, _remote_dir_base, recurse = True )
       # client.copy_file( self.job.work_directory / self.job.script_name, f'{ _remote_dir_base }/{self.job.script_name}' )
       # client.copy_file( rpc_client_loc, f'{ _remote_dir_base }/job_rpc_client' )
+      if data is not None:
+        client.copy_file( data, _remote_dir_base + '/data/', recurse = True )
 
       # Submit job
       cmd_out = client.run_command( submit_cmd )
