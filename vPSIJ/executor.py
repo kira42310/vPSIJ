@@ -140,7 +140,7 @@ class Executor:
     else:
       # cmd = [ 'rsync', '-auzr', '-e', f"'ssh -p { port }'", _working_dir, f'{ ssh_address }:{ _remote_dir_base }' ]
       cmd = [ f"rsync -auzr -e 'ssh -p { port }' { _working_dir } { ssh_address }:{ _remote_dir_base }" ]
-    response = subprocess.run( cmd, capture_output = True, text = True  )
+    response = subprocess.run( cmd, capture_output = True, text = True, shell = True )
     if response.returncode:
       raise Exception( 'Scheduler script transfer failed!' )
 
@@ -151,7 +151,7 @@ class Executor:
       else:
         # cmd = [ 'rsync', '-auzr', '-e', f"'ssh -p { port }'", data, f'{ ssh_address }:{ _remote_dir_base }/data/' ]
         cmd = [ f"rsync -auzr -e 'ssh -p { port }' { data } { ssh_address }:{ _remote_dir_base }/data/" ]
-      response = subprocess.run( cmd, capture_output = True, text = True  )
+      response = subprocess.run( cmd, capture_output = True, text = True, shell = True )
       if response.returncode:
         raise Exception( 'Data transfer failed!' )
 
