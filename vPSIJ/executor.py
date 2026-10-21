@@ -136,10 +136,10 @@ class Executor:
 
     if port is None:
       # cmd = [ 'rsync', '-auzr', _working_dir, f'{ ssh_address }:{ _remote_dir_base }' ]
-      cmd = [ f'rsync -auzr { _working_dir } { ssh_address }:{ _remote_dir_base }' ]
+      cmd = [ f'rsync -auzr { _working_dir }/ { ssh_address }:{ _remote_dir_base }/' ]
     else:
       # cmd = [ 'rsync', '-auzr', '-e', f"'ssh -p { port }'", _working_dir, f'{ ssh_address }:{ _remote_dir_base }' ]
-      cmd = [ f"rsync -auzr -e 'ssh -p { port }' { _working_dir } { ssh_address }:{ _remote_dir_base }" ]
+      cmd = [ f"rsync -auzr -e 'ssh -p { port }' { _working_dir }/ { ssh_address }:{ _remote_dir_base }/" ]
     response = subprocess.run( cmd, capture_output = True, text = True, shell = True )
     if response.returncode:
       raise Exception( 'Scheduler script transfer failed!' )
