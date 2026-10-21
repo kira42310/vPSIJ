@@ -4,7 +4,6 @@ from typing import Literal, Optional, Union
 from datetime import timedelta, datetime
 from pathlib import Path
 from pssh.clients import SSHClient
-from gevent import joinall
 
 # import os
 import grpc
@@ -48,9 +47,6 @@ class Executor:
 
     # Make directory at local site
     # if self.job.work_directory is None:
-    #   _working_dir = f'{ default_base_dir }/{ self.job.id }'
-    # else:
-    #   _working_dir = f'{ self.job.work_directory }/{ self.job.id }'
     _working_dir = self.job.work_directory
     Path( _working_dir ).mkdir( parents = True, exist_ok = True )
 
@@ -108,10 +104,6 @@ class Executor:
     host_port = self.format_host_port( callback_address = callback_address, custom_callback_address = custom_callback_address, custom_callback_port = custom_callback_port )
 
     # Make directory at local site
-    # if self.job.work_directory is None:
-    #   _working_dir = f'{ default_base_dir }/{ self.job.id }'
-    # else:
-    #   _working_dir = f'{ self.job.work_directory }/vPSIJ/{ self.job.id }'
     _working_dir = self.job.work_directory
     Path( _working_dir ).mkdir( parents = True, exist_ok = True )
 
@@ -137,20 +129,42 @@ class Executor:
     # Create submit command at remote
     submit_cmd = f"{ ' '.join( self.job.submit_cmd ) } { _remote_dir_base }/{ self.job.script_name }"
 
+    if username is None:
+      ssh_address = host
+    else:
+      ssh_address = f'{ username }@{ host }'
+
+    if port is None:
+      cmd = [ 'rsync', '-auzr', _working_dir, f'{ ssh_address }:{ _remote_dir_base }' ]
+    else:
+      cmd = [ 'rsync', '-auzr', '-e', f"'ssh -p { port }'", _working_dir, f'{ ssh_address }:{ _remote_dir_base }/data' ]
+    response = subprocess.run( cmd, capture_output = True, text = True  )
+    if response.returncode:
+      raise Exception( 'Scheduler script transfer failed!' )
+
+    if data is not None:
+      if port is None:
+        cmd = [ 'rsync', '-auzr', data, f'{ ssh_address }:{ _remote_dir_base }' ]
+      else:
+        cmd = [ 'rsync', '-auzr', '-e', f"'ssh -p { port }'", data, f'{ ssh_address }:{ _remote_dir_base }/data' ]
+      response = subprocess.run( cmd, capture_output = True, text = True  )
+      if response.returncode:
+        raise Exception( 'Data transfer failed!' )
+
     # Start remote submission
     with SSHClient( host = host, port = port, user = username, pkey = pkey_loc, allow_agent = allow_agent, identity_auth = identity_auth, timeout = ssh_timeout  ) as client:
       # Create directory at remote site
-      mkdir_out = client.run_command( f'mkdir -p { _remote_dir_base }' )
-      client.wait_finished( mkdir_out, timeout = 300 )
-      if mkdir_out.exit_code != 0:
-        raise Exception( mkdir_out.stderr )
+      # mkdir_out = client.run_command( f'mkdir -p { _remote_dir_base }' )
+      # client.wait_finished( mkdir_out, timeout = 300 )
+      # if mkdir_out.exit_code != 0:
+      #   raise Exception( mkdir_out.stderr )
 
       # Transfer file to remote site
-      client.copy_file( _working_dir, _remote_dir_base, recurse = True )
+      # client.copy_file( _working_dir, _remote_dir_base, recurse = True )
       # client.copy_file( self.job.work_directory / self.job.script_name, f'{ _remote_dir_base }/{self.job.script_name}' )
       # client.copy_file( rpc_client_loc, f'{ _remote_dir_base }/job_rpc_client' )
-      if data is not None:
-        client.copy_file( data, _remote_dir_base + '/data/', recurse = True )
+      # if data is not None:
+      #   client.copy_file( data, _remote_dir_base + '/data/', recurse = True )
 
       # Submit job
       cmd_out = client.run_command( submit_cmd )
