@@ -134,6 +134,7 @@ class Executor:
     else:
       ssh_address = f'{ username }@{ host }'
 
+    # Transfer scheduler script to remote
     if port is None:
       # cmd = [ 'rsync', '-auzr', _working_dir, f'{ ssh_address }:{ _remote_dir_base }' ]
       cmd = [ f'rsync -auzr { _working_dir }/ { ssh_address }:{ _remote_dir_base }/' ]
@@ -144,6 +145,7 @@ class Executor:
     if response.returncode:
       raise Exception( 'Scheduler script transfer failed!' )
 
+    # Transfer data to remote site
     if data is not None:
       if port is None:
         # cmd = [ 'rsync', '-auzr', data, f'{ ssh_address }:{ _remote_dir_base }/data/' ]
@@ -156,32 +158,36 @@ class Executor:
         raise Exception( 'Data transfer failed!' )
 
     # Start remote submission
-    with SSHClient( host = host, port = port, user = username, pkey = pkey_loc, allow_agent = allow_agent, identity_auth = identity_auth, timeout = ssh_timeout  ) as client:
+    if port is None:
+      cmd = [ f"ssh { ssh_address } '{ submit_cmd }'" ]
+    else:
+      cmd = [ f"ssh -p { port } { ssh_address } '{ submit_cmd }'"]
+    response = subprocess.run( cmd, capture_output = True, text = True, shell = True, timeout = ssh_timeout )
+    if self.job.check_and_get_native_id_from_submit( response.stdout ):
+      self.status = status.queuing
+    else:
+      self.status = status.failed
+      raise Exception( response.stderr )
+
+    # with SSHClient( host = host, port = port, user = username, pkey = pkey_loc, allow_agent = allow_agent, identity_auth = identity_auth, timeout = ssh_timeout  ) as client:
       # Create directory at remote site
       # mkdir_out = client.run_command( f'mkdir -p { _remote_dir_base }' )
       # client.wait_finished( mkdir_out, timeout = 300 )
       # if mkdir_out.exit_code != 0:
       #   raise Exception( mkdir_out.stderr )
 
-      # Transfer file to remote site
-      # client.copy_file( _working_dir, _remote_dir_base, recurse = True )
-      # client.copy_file( self.job.work_directory / self.job.script_name, f'{ _remote_dir_base }/{self.job.script_name}' )
-      # client.copy_file( rpc_client_loc, f'{ _remote_dir_base }/job_rpc_client' )
-      # if data is not None:
-      #   client.copy_file( data, _remote_dir_base + '/data/', recurse = True )
-
       # Submit job
-      cmd_out = client.run_command( submit_cmd )
-      client.wait_finished( cmd_out, timeout = 300 )
-      if cmd_out.exit_code != 0:
-        raise Exception( next( cmd_out.stderr ) )
-      # response = subprocess.run( execute_cmd, capture_output = True, text = True )
-      # response = next( cmd_out.stdout )
-      if self.job.check_and_get_native_id_from_submit( next( cmd_out.stdout ) ):
-        self.status = status.queuing
-      else:
-        self.status = status.failed
-        raise Exception( cmd_out.stderr )
+      # cmd_out = client.run_command( submit_cmd )
+      # client.wait_finished( cmd_out, timeout = 300 )
+      # if cmd_out.exit_code != 0:
+      #   raise Exception( next( cmd_out.stderr ) )
+      # # response = subprocess.run( execute_cmd, capture_output = True, text = True )
+      # # response = next( cmd_out.stdout )
+      # if self.job.check_and_get_native_id_from_submit( next( cmd_out.stdout ) ):
+      #   self.status = status.queuing
+      # else:
+      #   self.status = status.failed
+      #   raise Exception( cmd_out.stderr )
 
   def wait( self, timeout: Optional[ timedelta ] = None, target_state: Optional[ status ] = None ):
     start = datetime.now()
