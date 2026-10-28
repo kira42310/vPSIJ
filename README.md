@@ -125,10 +125,10 @@ print( res )
 | host | str | <span style="color:red">Mandatory</span> | Address to the remote cluster | 
 | username | str | None | Username to the remote cluster | 
 | port | str | None | If the remote cluster does not use default port number |
-| pkey_loc | str, pathlib.Path | None | Path to private key for authentication | 
+| ~~pkey_loc~~ | ~~str, pathlib.Path~~ | ~~None~~ | ~~Path to private key for authentication~~ >> Change SSH method to run through subprocess | 
 | data | str, pathlib.Path | None | <span style="color:red">****</span>Not implement yet | 
-| allow_agent | bool | True | Enable agent for SSH |
-| identity_auth | bool | True | Enable identity authentication | 
+| ~~allow_agent~~ | ~~bool~~ | ~~True~~ | ~~Enable agent for SSH~~ >> Change SSH method to run through subprocess |
+| ~~identity_auth~~ | ~~bool~~ | ~~True~~ | ~~Enable identity authentication~~ >> Change SSH method to run through subprocess | 
 | ssh_timeout | int, float | None | SSH connection timeout |
 | secure_channel | bool | False | Enable gRPC secure channel |
 | callback_address | 'hostname', 'ip', 'custom' | 'hostname' | The connection address for update the job status as hostname or ip, if the hostname cannot resolve, hostname and ip will translate to hostname or ip of the initialize machine. custom will handle the user select hostname/ip address to the initialize machine | 
