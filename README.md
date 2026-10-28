@@ -1,5 +1,7 @@
-# vPSIJ
-Job scheduler interface through Python-based library
+# νPSIJ
+νPSIJ (called nu-PSIJ as ν in greek) is a job scheduler interface through Python-based library inspired and reimplementation from [PSI/J](https://github.com/ExaWorks/psij-python) project. νPSIJ and PSI/J is the Python-based library that enable the job submission from the Python script to the job scheduler/resource managment application usually installed on HPC cluster. The user need to provide the job and resources information along with the command for execution. The νPSIJ can execute any command, script, program, or application that user desire by declared as the command parameter of the job. The major different between the νPSIJ and PSI/J is the remote submission function that allow the user to submit the job over the network at other clusters. To enable remote submission, we has reimplement the νPSIJ from the ground up based on PSI/J. 
+
+The νPSIJ is still finailize. Some parameter list in the table below may change in the later version.
 
 ### How to submit job at local cluster
 
