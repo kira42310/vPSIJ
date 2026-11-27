@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { email = "soratouch@hotmail.com" }
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [ 'jinja2', 'grpcio', 'grpcio-tools', 'parallel-ssh' ]
 
 [project.scripts]
