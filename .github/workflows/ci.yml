@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.4.0
+      # Only syntax errors and undefined names for now; widen the rule set later.
+      - run: >-
+          uvx ruff check .
+          --select E9,F63,F7,F82
+          --extend-exclude 'vPSIJ/updater_pb2*.py'
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # grpcio >= 1.82.1 (required by the generated vPSIJ/updater_pb2_grpc.py) needs Python 3.10+
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.4.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: uv build
+      - name: Install the wheel
+        run: |
+          uv venv .ci-venv
+          uv pip install --python .ci-venv dist/*.whl
+      - name: Import smoke test
+        run: .ci-venv/bin/python -c "from vPSIJ import Executor, Job, job_spec; import vPSIJ.job_rpc_client, vPSIJ.setup_client, vPSIJ.setup_template"
+      - name: CLI entry points are installed
+        run: |
+          for cmd in vpsij-updater vpsij-setup-client vpsij-setup-template; do
+            test -x ".ci-venv/bin/$cmd" || { echo "missing $cmd"; exit 1; }
+          done
+      - name: Unit tests
+        run: |
+          uv pip install --python .ci-venv --group dev
+          .ci-venv/bin/python -m pytest -rs
